@@ -1,0 +1,37 @@
+{
+  "name": "@whatskit/ossdeployer-cli",
+  "version": "0.1.0",
+  "homepage": "https://github.com/whatskit/ossdeployer-cli",
+  "bugs": "https://github.com/whatskit/ossdeployer-cli/issues",
+  "repository": "git@github.com:whatskit/ossdeployer-cli",
+  "author": "Billgo <hi@billgo.me>",
+  "license": "UNLICENSED",
+  "main": "lib/index.js",
+  "bin": {
+    "ossdeployer-cli": "./bin/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc src/index.ts --outDir bin",
+    "release:dev": "node bin/index.js --releaseEnv dev"
+  },
+  "dependencies": {
+    "ali-oss": "^6.10.0",
+    "minimist": "^1.2.5"
+  },
+  "devDependencies": {
+    "@types/ali-oss": "^6.0.5",
+    "@types/minimist": "^1.2.0",
+    "@types/node": "^14.6.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">= 14",
+    "npm": ">= 8"
+  }
+}
