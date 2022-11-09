@@ -1,7 +1,6 @@
 "use strict";
 exports.__esModule = true;
-exports.upload = exports.fs = exports.path = exports.alioss = void 0;
-exports.alioss = require('ali-oss');
+exports.upload = exports.fs = exports.path = void 0;
 exports.path = require('path');
 exports.fs = require('fs');
 var allNumber = 0;
@@ -9,14 +8,13 @@ var tmpNumber = 0;
 var sucNumber = 0;
 var retNumber = 0;
 var sizeNumber = 0;
-function upload(aliossConfig) {
-    var client = new exports.alioss(aliossConfig);
-    console.log("[ossdeployer-cli] START UPLOADING... oss://".concat(aliossConfig.bucket, "/").concat(aliossConfig.target));
-    var list = _list(exports.path.posix.join(process.cwd(), aliossConfig.source));
+function upload(client, ossConfig) {
+    console.log("[ossdeployer-cli] START UPLOADING... oss://" + ossConfig.bucket + "/" + ossConfig.target);
+    var list = _list(exports.path.posix.join(process.cwd(), ossConfig.source));
     allNumber = list.length;
     if (list.length > 0) {
         list.forEach(function (item) {
-            _upload(item, aliossConfig, client);
+            _upload(item, client, ossConfig);
         });
     }
     else {
@@ -26,25 +24,25 @@ function upload(aliossConfig) {
 exports.upload = upload;
 function _result() {
     if (allNumber === tmpNumber) {
-        console.log("[ossdeployer-cli] RESULT :   ".concat(_renderSize(sizeNumber), " - [ SIZE ]   ").concat(allNumber, " - [ ALL ]   ").concat(sucNumber, " - [ SUCCESS ]   ").concat(retNumber, " - [ RETRY ]"));
+        console.log("[ossdeployer-cli] RESULT:   " + _renderSize(sizeNumber) + " - [ SIZE ]   " + allNumber + " - [ ALL ]   " + sucNumber + " - [ SUCCESS ]   " + retNumber + " - [ RETRY ]");
     }
 }
-function _upload(item, aliossConfig, client, retry) {
+function _upload(item, client, ossConfig, retry) {
     if (retry === void 0) { retry = true; }
-    client.put("".concat(aliossConfig.target).concat(item.relative), item.file).then(function () {
+    client.put("" + ossConfig.target + item.relative, item.file).then(function () {
         sucNumber++;
         tmpNumber++;
         sizeNumber += item.size;
-        console.log("[ossdeployer-cli] \u3010 ".concat(item.file, " \u3011SUCCESS   \u2714 \u3010").concat(_renderSize(item.size), "\u3011"));
+        console.log("[ossdeployer-cli] [ " + item.file + " ] SUCCESS   \u2714 [" + _renderSize(item.size) + "]");
         _result();
     })["catch"](function () {
         if (retry) {
-            _upload(item, aliossConfig, client, false);
+            _upload(item, client, ossConfig, false);
         }
         else {
             retNumber++;
             tmpNumber++;
-            console.log("[ossdeployer-cli] \u3010 ".concat(item.file, " \u3011FAILURE   \u2718 "));
+            console.log("[ossdeployer-cli] [ " + item.file + " ] FAILURE   \u2718 ");
             _result();
         }
     });
@@ -62,7 +60,7 @@ function _list(src) {
                 return;
             }
             fileList.forEach(function (item) {
-                fetchFile(exports.path.posix.join(file, "./".concat(item)));
+                fetchFile(exports.path.posix.join(file, "./" + item));
             });
         }
         else {

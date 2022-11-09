@@ -1,4 +1,6 @@
-export const alioss = require('ali-oss')
+import * as OSS from "ali-oss"
+import { OssConfig } from "./oss"
+
 export const path = require('path')
 export const fs = require('fs')
 
@@ -8,24 +10,13 @@ let sucNumber = 0
 let retNumber = 0
 let sizeNumber = 0
 
-interface IOssutilConfig {
-  accessKeyId: string,
-  accessKeySecret: string,
-  bucket: string,
-  region: string,
-  releaseEnvConf: any,
-  source: string,
-  target: string
-}
-
-export function upload (aliossConfig: IOssutilConfig) {
-  const client = new alioss(aliossConfig)
-  console.log(`[ossdeployer-cli] START UPLOADING... oss://${aliossConfig.bucket}/${aliossConfig.target}`)
-  const list = _list(path.posix.join(process.cwd(), aliossConfig.source))
+export function upload(client: OSS, ossConfig: OssConfig) {
+  console.log(`[ossdeployer-cli] START UPLOADING... oss://${ossConfig.bucket}/${ossConfig.target}`)
+  const list = _list(path.posix.join(process.cwd(), ossConfig.source))
   allNumber = list.length
   if (list.length > 0) {
     list.forEach(item => {
-      _upload(item, aliossConfig, client)
+      _upload(item, client, ossConfig)
     })
   } else {
     _result()
@@ -34,24 +25,24 @@ export function upload (aliossConfig: IOssutilConfig) {
 
 function _result() {
   if (allNumber === tmpNumber) {
-    console.log(`[ossdeployer-cli] RESULT :   ${_renderSize(sizeNumber)} - [ SIZE ]   ${allNumber} - [ ALL ]   ${sucNumber} - [ SUCCESS ]   ${retNumber} - [ RETRY ]`)
+    console.log(`[ossdeployer-cli] RESULT:   ${_renderSize(sizeNumber)} - [ SIZE ]   ${allNumber} - [ ALL ]   ${sucNumber} - [ SUCCESS ]   ${retNumber} - [ RETRY ]`)
   }
 }
 
-function _upload(item: any, aliossConfig: IOssutilConfig, client: any, retry = true) {
-  client.put(`${aliossConfig.target}${item.relative}`, item.file).then(() => {
+function _upload(item: any, client: OSS, ossConfig: OssConfig, retry = true) {
+  client.put(`${ossConfig.target}${item.relative}`, item.file).then(() => {
     sucNumber++
     tmpNumber++
     sizeNumber += item.size
-    console.log(`[ossdeployer-cli] 【 ${item.file} 】SUCCESS   ✔ 【${_renderSize(item.size)}】`)
+    console.log(`[ossdeployer-cli] [ ${item.file} ] SUCCESS   ✔ [${_renderSize(item.size)}]`)
     _result()
   }).catch(() => {
     if (retry) {
-      _upload(item, aliossConfig, client, false)
+      _upload(item, client, ossConfig, false)
     } else {
       retNumber++
       tmpNumber++
-      console.log(`[ossdeployer-cli] 【 ${item.file} 】FAILURE   ✘ `)
+      console.log(`[ossdeployer-cli] [ ${item.file} ] FAILURE   ✘ `)
       _result()
     }
   })
