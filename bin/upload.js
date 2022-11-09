@@ -11,7 +11,7 @@ var retNumber = 0;
 var sizeNumber = 0;
 function upload(aliossConfig) {
     var client = new exports.alioss(aliossConfig);
-    console.log("[ossdeployer-cli] START UPLOADING... oss://" + aliossConfig.bucket + "/" + aliossConfig.target);
+    console.log("[ossdeployer-cli] START UPLOADING... oss://".concat(aliossConfig.bucket, "/").concat(aliossConfig.target));
     var list = _list(exports.path.posix.join(process.cwd(), aliossConfig.source));
     allNumber = list.length;
     if (list.length > 0) {
@@ -26,16 +26,16 @@ function upload(aliossConfig) {
 exports.upload = upload;
 function _result() {
     if (allNumber === tmpNumber) {
-        console.log("[ossdeployer-cli] RESULT :   " + _renderSize(sizeNumber) + " - [ SIZE ]   " + allNumber + " - [ ALL ]   " + sucNumber + " - [ SUCCESS ]   " + retNumber + " - [ RETRY ]");
+        console.log("[ossdeployer-cli] RESULT :   ".concat(_renderSize(sizeNumber), " - [ SIZE ]   ").concat(allNumber, " - [ ALL ]   ").concat(sucNumber, " - [ SUCCESS ]   ").concat(retNumber, " - [ RETRY ]"));
     }
 }
 function _upload(item, aliossConfig, client, retry) {
     if (retry === void 0) { retry = true; }
-    client.put("" + aliossConfig.target + item.relative, item.file).then(function () {
+    client.put("".concat(aliossConfig.target).concat(item.relative), item.file).then(function () {
         sucNumber++;
         tmpNumber++;
         sizeNumber += item.size;
-        console.log("[ossdeployer-cli] \u3010 " + item.file + " \u3011SUCCESS   \u2714 \u3010" + _renderSize(item.size) + "\u3011");
+        console.log("[ossdeployer-cli] \u3010 ".concat(item.file, " \u3011SUCCESS   \u2714 \u3010").concat(_renderSize(item.size), "\u3011"));
         _result();
     })["catch"](function () {
         if (retry) {
@@ -44,7 +44,7 @@ function _upload(item, aliossConfig, client, retry) {
         else {
             retNumber++;
             tmpNumber++;
-            console.log("[ossdeployer-cli] \u3010 " + item.file + " \u3011FAILURE   \u2718 ");
+            console.log("[ossdeployer-cli] \u3010 ".concat(item.file, " \u3011FAILURE   \u2718 "));
             _result();
         }
     });
@@ -62,7 +62,7 @@ function _list(src) {
                 return;
             }
             fileList.forEach(function (item) {
-                fetchFile(exports.path.posix.join(file, "./" + item));
+                fetchFile(exports.path.posix.join(file, "./".concat(item)));
             });
         }
         else {

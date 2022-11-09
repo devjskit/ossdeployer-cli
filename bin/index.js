@@ -55,9 +55,9 @@ if (program.target)
 var verParams = ['region', 'accessKeyId', 'accessKeySecret', 'bucket', 'source', 'target'];
 verParams.forEach(function (k) {
     if (!(k in aliossConfig)) {
-        console.error("ERROR: \u7F3A\u5C11\u53C2\u6570 " + k + "\uFF0C\u4F7F\u7528 --help \u547D\u4EE4\u67E5\u770B\u5177\u4F53\u63AA\u65BD\uFF01");
+        console.error("ERROR: \u7F3A\u5C11\u53C2\u6570 ".concat(k, "\uFF0C\u4F7F\u7528 --help \u547D\u4EE4\u67E5\u770B\u5177\u4F53\u63AA\u65BD\uFF01"));
         process.exit();
     }
 });
 // 上传 OSS
-upload_1.upload(aliossConfig);
+(0, upload_1.upload)(aliossConfig);
