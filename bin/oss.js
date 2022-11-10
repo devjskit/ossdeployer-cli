@@ -16,11 +16,11 @@ var AliyunOssService = /** @class */ (function () {
     }
     /** 上传文件 */
     AliyunOssService.prototype.upload = function () {
-        return upload_1.upload(this.client, this.config);
+        return (0, upload_1.upload)(this.client, this.config);
     };
     /** 使用前缀删除文件夹 */
     AliyunOssService.prototype["delete"] = function (prefix) {
-        return delete_1.deletePrefix(this.client, prefix);
+        return (0, delete_1.deletePrefix)(this.client, prefix);
     };
     return AliyunOssService;
 }());

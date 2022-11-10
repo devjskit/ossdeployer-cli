@@ -58,7 +58,7 @@ if (program.target)
 var params = ['accessKeyId', 'accessKeySecret', 'region', 'bucket', 'source', 'target'];
 params.forEach(function (k) {
     if (!(k in ossConfig)) {
-        console.error("ERROR: \u7F3A\u5C11\u53C2\u6570 " + k + "\uFF0C\u4F7F\u7528 --help \u547D\u4EE4\u67E5\u770B\u5177\u4F53\u914D\u7F6E\uFF01");
+        console.error("ERROR: \u7F3A\u5C11\u53C2\u6570 ".concat(k, "\uFF0C\u4F7F\u7528 --help \u547D\u4EE4\u67E5\u770B\u5177\u4F53\u914D\u7F6E\uFF01"));
         process.exit();
     }
 });

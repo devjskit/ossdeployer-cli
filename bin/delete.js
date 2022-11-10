@@ -76,7 +76,7 @@ function deletePrefix(client, prefix, maxKeys) {
                     return [4 /*yield*/, Promise.all(list.objects.map(function (v) { return handleDel(client, v.name); }))];
                 case 2:
                     result = _a.sent();
-                    console.log("\u5DF2\u6E05\u7A7A\u76EE\u6807\u6587\u4EF6\u5939\uFF1A" + prefix + "\uFF0C\u5171\u8BA1\u5220\u9664" + list.objects.length + "\u6761\u6587\u4EF6\u8BB0\u5F55");
+                    console.log("\u5DF2\u6E05\u7A7A\u76EE\u6807\u6587\u4EF6\u5939\uFF1A".concat(prefix, "\uFF0C\u5171\u8BA1\u5220\u9664").concat(list.objects.length, "\u6761\u6587\u4EF6\u8BB0\u5F55"));
                     return [2 /*return*/];
             }
         });

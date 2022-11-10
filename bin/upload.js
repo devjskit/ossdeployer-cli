@@ -9,7 +9,7 @@ var sucNumber = 0;
 var retNumber = 0;
 var sizeNumber = 0;
 function upload(client, ossConfig) {
-    console.log("[ossdeployer-cli] START UPLOADING... oss://" + ossConfig.bucket + "/" + ossConfig.target);
+    console.log("[ossdeployer-cli] START UPLOADING... oss://".concat(ossConfig.bucket, "/").concat(ossConfig.target));
     var list = _list(exports.path.posix.join(process.cwd(), ossConfig.source));
     allNumber = list.length;
     if (list.length > 0) {
@@ -24,16 +24,16 @@ function upload(client, ossConfig) {
 exports.upload = upload;
 function _result() {
     if (allNumber === tmpNumber) {
-        console.log("[ossdeployer-cli] RESULT:   " + _renderSize(sizeNumber) + " - [ SIZE ]   " + allNumber + " - [ ALL ]   " + sucNumber + " - [ SUCCESS ]   " + retNumber + " - [ RETRY ]");
+        console.log("[ossdeployer-cli] RESULT:   ".concat(_renderSize(sizeNumber), " - [ SIZE ]   ").concat(allNumber, " - [ ALL ]   ").concat(sucNumber, " - [ SUCCESS ]   ").concat(retNumber, " - [ RETRY ]"));
     }
 }
 function _upload(item, client, ossConfig, retry) {
     if (retry === void 0) { retry = true; }
-    client.put("" + ossConfig.target + item.relative, item.file).then(function () {
+    client.put("".concat(ossConfig.target).concat(item.relative), item.file).then(function () {
         sucNumber++;
         tmpNumber++;
         sizeNumber += item.size;
-        console.log("[ossdeployer-cli] [ " + item.file + " ] SUCCESS   \u2714 [" + _renderSize(item.size) + "]");
+        console.log("[ossdeployer-cli] [ ".concat(item.file, " ] SUCCESS   \u2714 [").concat(_renderSize(item.size), "]"));
         _result();
     })["catch"](function () {
         if (retry) {
@@ -42,7 +42,7 @@ function _upload(item, client, ossConfig, retry) {
         else {
             retNumber++;
             tmpNumber++;
-            console.log("[ossdeployer-cli] [ " + item.file + " ] FAILURE   \u2718 ");
+            console.log("[ossdeployer-cli] [ ".concat(item.file, " ] FAILURE   \u2718 "));
             _result();
         }
     });
@@ -60,7 +60,7 @@ function _list(src) {
                 return;
             }
             fileList.forEach(function (item) {
-                fetchFile(exports.path.posix.join(file, "./" + item));
+                fetchFile(exports.path.posix.join(file, "./".concat(item)));
             });
         }
         else {
